@@ -26,4 +26,4 @@ async def search(query: str) -> Optional[dict[str, Any]]:
     return cast(dict[str, Any], await wrapped.ainvoke({"query": query}))
 
 
-TOOLS: List[Callable[..., Any]] = [search]
+TOOLS: List[Callable[..., Any]] = []

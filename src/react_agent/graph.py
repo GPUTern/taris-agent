@@ -14,7 +14,7 @@ from langgraph.runtime import Runtime
 from react_agent.context import Context
 from react_agent.state import InputState, State
 from react_agent.tools import TOOLS
-from react_agent.utils import load_chat_model
+from react_agent.utils import load_chat_model, process_message_content, process_messages
 
 # Define the function that calls the model
 
@@ -33,6 +33,8 @@ async def call_model(
     Returns:
         dict: A dictionary containing the model's response message.
     """
+    # Replace the message content with the processed content
+    messages = process_messages(state.messages)
     # Initialize the model with tool binding. Change the model or add more tools here.
     model = load_chat_model(runtime.context.model).bind_tools(TOOLS)
 
@@ -45,7 +47,7 @@ async def call_model(
     response = cast(
         AIMessage,
         await model.ainvoke(
-            [{"role": "system", "content": system_message}, *state.messages]
+            [{"role": "system", "content": system_message}, *messages]
         ),
     )
 
